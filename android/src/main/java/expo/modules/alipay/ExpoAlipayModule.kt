@@ -1,50 +1,81 @@
 package expo.modules.alipay
 
+import android.app.Activity
+import android.content.pm.PackageManager
+import com.alipay.sdk.app.AlipayApi
+import com.alipay.sdk.app.AuthTask
+import com.alipay.sdk.app.PayTask
+import com.alipay.sdk.app.EnvUtils
+import expo.modules.core.logging.Logger
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
-import java.net.URL
+import expo.modules.kotlin.Promise
+import expo.modules.core.logging.LogHandlers
 
 class ExpoAlipayModule : Module() {
-  // Each module class must implement the definition function. The definition consists of components
-  // that describes the module's functionality and behavior.
-  // See https://docs.expo.dev/modules/module-api for more details about available components.
+
+  companion object {
+    private val logger = Logger(listOf(LogHandlers.createOSLogHandler("ExpoAlipayModule")))
+  }
   override fun definition() = ModuleDefinition {
-    // Sets the name of the module that JavaScript code will use to refer to the module. Takes a string as an argument.
-    // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
-    // The module will be accessible from `requireNativeModule('ExpoAlipay')` in JavaScript.
+
     Name("ExpoAlipay")
 
-    // Defines constant property on the module.
-    Constant("PI") {
-      Math.PI
-    }
+    OnCreate {
+      val applicationInfo = appContext.reactContext?.packageManager?.getApplicationInfo(
+        appContext.reactContext?.packageName.toString(),
+        PackageManager.GET_META_DATA
+      )
 
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
-
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      "Hello world! 👋"
-    }
-
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { value: String ->
-      // Send an event to JavaScript.
-      sendEvent("onChange", mapOf(
-        "value" to value
-      ))
-    }
-
-    // Enables the module to be used as a native view. Definition components that are accepted as part of
-    // the view definition: Prop, Events.
-    View(ExpoAlipayView::class) {
-      // Defines a setter for the `url` prop.
-      Prop("url") { view: ExpoAlipayView, url: URL ->
-        view.webView.loadUrl(url.toString())
+      val appId = applicationInfo?.metaData?.getString("ALIPAY_APPID") ?: "NOT_FOUND"
+      if(appId != "NOT_FOUND"){
+        AlipayApi.registerApp(appContext.reactContext,appId)
       }
-      // Defines an event that the view can send to JavaScript.
-      Events("onLoad")
+    }
+
+    AsyncFunction("pay") { orderString: String, promise: Promise ->
+      val activity = appContext.currentActivity
+      if (activity == null) {
+        promise.reject("NO_ACTIVITY", "No current activity", null)
+        return@AsyncFunction
+      }
+      Thread {
+        val alipay = PayTask(activity)
+        val result = alipay.payV2(orderString, true)
+        promise.resolve(result)
+      }.start()
+    }
+
+    AsyncFunction("setAlipaySandbox") { isSandbox: Boolean, promise: Promise ->
+      if (isSandbox) {
+        EnvUtils.setEnv(EnvUtils.EnvEnum.SANDBOX)
+      } else {
+        EnvUtils.setEnv(EnvUtils.EnvEnum.ONLINE)
+      }
+      promise.resolve(isSandbox)
+    }
+
+    AsyncFunction("authInfo") { infoStr: String, promise: Promise ->
+      val activity = appContext.currentActivity
+      if (activity == null) {
+        promise.reject("NO_ACTIVITY", "No current activity", null)
+        return@AsyncFunction
+      }
+      Thread {
+        val authTask = AuthTask(activity)
+        val result = authTask.authV2(infoStr, true)
+        promise.resolve(result)
+      }.start()
+    }
+
+    AsyncFunction("getVersion") { promise: Promise ->
+      val activity = appContext.currentActivity
+      if (activity == null) {
+        promise.reject("NO_ACTIVITY", "No current activity", null)
+        return@AsyncFunction
+      }
+      val payTask = PayTask(activity)
+      promise.resolve(payTask.version)
     }
   }
 }

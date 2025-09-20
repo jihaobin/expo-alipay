@@ -27,6 +27,16 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "../app.plugin.js",
+        {
+          "appId": "9021000153675106"
+        }
+      ],
+      "expo-font"
+    ]
   }
+
 }
