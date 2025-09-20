@@ -19,7 +19,7 @@ config.resolver.nodeModulesPaths = [
 ];
 
 config.resolver.extraNodeModules = {
-  'expo-alipay': '..',
+  'native-expo-alipay': '..',
 };
 
 config.watchFolders = [path.resolve(__dirname, '..')];

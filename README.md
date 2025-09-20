@@ -7,7 +7,7 @@
 ## 安装
 
 ```bash
-npx expo install expo-alipay
+npx expo install native-expo-alipay
 ```
 
 ## 配置
@@ -21,7 +21,7 @@ npx expo install expo-alipay
   "expo": {
     "plugins": [
       [
-        "expo-alipay",
+        "native-expo-alipay",
         {
           "appId": "YOUR_ALIPAY_APP_ID"
         }
@@ -58,7 +58,7 @@ npx expo install expo-alipay
 使用提供的订单字符串发起支付宝支付。
 
 ```javascript
-import { alipay } from 'expo-alipay';
+import { alipay } from 'native-expo-alipay';
 
 const result = await alipay("your_order_string_here");
 ```
@@ -68,7 +68,7 @@ const result = await alipay("your_order_string_here");
 发起支付宝认证/授权。
 
 ```javascript
-import { authInfo } from 'expo-alipay';
+import { authInfo } from 'native-expo-alipay';
 
 const result = await authInfo("your_auth_info_string_here");
 ```
@@ -78,7 +78,7 @@ const result = await authInfo("your_auth_info_string_here");
 返回当前支付宝 SDK 版本。
 
 ```javascript
-import { getVersion } from 'expo-alipay';
+import { getVersion } from 'native-expo-alipay';
 
 const version = await getVersion();
 ```
@@ -88,7 +88,7 @@ const version = await getVersion();
 设置支付宝环境为沙箱模式（仅 Android）。
 
 ```javascript
-import { setAlipaySandbox } from 'expo-alipay';
+import { setAlipaySandbox } from 'native-expo-alipay';
 
 setAlipaySandbox(true); // 启用沙箱模式
 ```
@@ -98,7 +98,7 @@ setAlipaySandbox(true); // 启用沙箱模式
 设置支付宝重定向 scheme（仅 iOS）。
 
 ```javascript
-import { setAlipayScheme } from 'expo-alipay';
+import { setAlipayScheme } from 'native-expo-alipay';
 
 setAlipayScheme("your_scheme");
 ```
@@ -148,7 +148,7 @@ interface AuthResult {
 ## 使用示例
 
 ```javascript
-import { alipay, setAlipaySandbox } from 'expo-alipay';
+import { alipay, setAlipaySandbox } from 'native-expo-alipay';
 import { Button } from 'react-native';
 
 export default function App() {

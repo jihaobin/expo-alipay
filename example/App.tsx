@@ -1,4 +1,4 @@
-import { alipay, setAlipaySandbox } from 'expo-alipay';
+import { alipay, setAlipaySandbox } from 'native-expo-alipay';
 import { Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 

@@ -1,5 +1,5 @@
 {
-  "name": "expo-alipay",
+  "name": "native-expo-alipay",
   "version": "1.0.0",
   "description": "将支付宝支付功能集成到您的 Expo 应用中的模块，支持 Android 平台",
   "main": "build/index.js",
@@ -30,12 +30,14 @@
   "author": "jihaobin <2644263665@qq.com> (https://github.com/jihaobin)",
   "license": "MIT",
   "homepage": "https://github.com/jihaobin/expo-alipay#readme",
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {
     "@types/react": "~19.1.0",
-    "expo-module-scripts": "^5.0.7",
     "expo": "^54.0.7",
-    "react-native": "0.81.4"
+    "expo-module-scripts": "^5.0.7",
+    "react-native": "0.81.4",
+    "typescript": "^5.9.2"
   },
   "peerDependencies": {
     "expo": "*",
