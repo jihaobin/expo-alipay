@@ -164,10 +164,6 @@ export default function App() {
 }
 ```
 
-## 贡献
-
-欢迎贡献！请查看 [贡献指南](CONTRIBUTING.md) 了解更多信息。
-
 ## 许可证
 
-MIT
+[MIT](LICENSE)
